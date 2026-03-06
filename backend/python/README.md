@@ -455,3 +455,38 @@ docker compose down                          # Stop MongoDB
 docker compose ps                            # List running containers
 docker compose logs -f                       # View logs
 ```
+```bash
+backend/python
+├── manage.py                    
+│
+├── django_app/                  # Django configuration
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── asgi.py
+│   └── wsgi.py
+│
+├── api/                         # API Layer Storing the Get Api
+│   ├── views.py                 # HTTP endpoints
+│   ├── urls.py                  # API routes (Storing API URLs)
+│   ├── forms.py                 # Request validation (Validating the values which are coming)
+│   └── tests.py
+│
+├── shared/                      # Core Hexagonal Architecture
+│   │
+│   ├── domain/                  # Business Logic (Writing the things which are required)
+│   │   ├── greeting.py         # File storing the main business logic( which greeting the user by taking the name and age as parameters)
+│   │
+│   ├── application/             # Use Cases
+│   │   └── greet_usecase.py     # File storing the usecases
+│   │
+│   └── adapter/                 # Infrastructure / Services which needs to be merged with the port
+│   │   └── greeting_service.py  # The file storing its 
+│   │
+│   └── port/                 # The Port
+│   │   └── greeting_port.py  # The file storing the interface (Port) logic
+│   │
+│   └── test/infrastructure # The Test
+│       └── test_health.py  # The file storing some tests which are conducted on it
+---
+

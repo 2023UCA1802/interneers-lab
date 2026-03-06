@@ -2,22 +2,6 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-from fastapi import FastAPI
-from shared.application.greet_usecase import Greet_Usecase
-from shared.adapter.greeting_service import GreetingService
-
-app = FastAPI()
-
-greeting_service=GreetingService()
-greet_usecase=Greet_Usecase(greeting_service)
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-@app.get("/greet")
-def greet(name:str,age:int):
-    return greet_usecase.execute(name,age)
 
 
 def main():

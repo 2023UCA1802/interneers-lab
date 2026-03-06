@@ -1,7 +1,7 @@
 
 from fastapi.testclient import TestClient
 import pytest
-from manage import app
+from main import app
 
 
 client = TestClient(app)
@@ -22,4 +22,4 @@ def test_root():
 def test_greet(name:str,age:int,expected:str):
     response=client.get("/greet", params={"name":name, "age":age})
     assert response.status_code==200
-    assert response.json()
+    assert response.json()["message"]==expected

@@ -12,7 +12,7 @@
 # django_app/urls.py
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 from django.http import JsonResponse
 
 def hello_name(request):
@@ -27,6 +27,8 @@ def hello_name(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/', hello_name),
+    path('api/', include("api.urls")),
+    path('',include("inventory.urls")),
     # Example usage: /hello/?name=Bob
     # returns {"message": "Hello, Bob!"}
 ]

@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+from pymongo import MongoClient
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +42,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "shared",
+    "inventory",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -121,3 +129,22 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/6.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# MONGO_USER = os.getenv("MONGO_USER", "root")
+# MONGO_PASS = os.getenv("MONGO_PASS", "example")
+# MONGO_PORT = os.getenv("MONGO_PORT", "27019")
+# MONGO_HOST = os.getenv("MONGO_HOST", "localhost")
+
+# MONGO_URI = (
+#     f"mongodb://{MONGO_USER}:{MONGO_PASS}"
+#     f"@{MONGO_HOST}:{MONGO_PORT}/?authSource=admin"
+# )
+
+# mongo_client = MongoClient(MONGO_URI)
+
+# MONGO_DB = mongo_client["your_database_name"]
+# client = MongoClient(
+#     f"mongodb://{MONGO_USER}:{MONGO_PASS}@{MONGO_HOST}:{MONGO_PORT}/?authSource=admin"
+# )
+
+# # DATABASES = {}
