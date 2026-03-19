@@ -4,14 +4,14 @@ from django.utils import timezone
 
 class Category(models.Model):
     name=models.CharField(max_length=100,unique=True)
-    description=models.TextField(blank=True)
+    description=models.TextField()
     
     def __str__(self):
         return self.name
     
 class Brand(models.Model):
     name=models.CharField(max_length=100,unique=True)
-    description=models.TextField(blank=True)
+    description=models.TextField()
     
     def __str__(self):
         return self.name
@@ -36,4 +36,15 @@ class Product(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.title
+        return self.name
+
+class ProductModel2(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.TextField()
+    category = models.CharField(max_length=100)
+    brand = models.CharField(max_length=100)
+    price = models.DecimalField(decimal_places=2,max_digits=10)
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return self.name
