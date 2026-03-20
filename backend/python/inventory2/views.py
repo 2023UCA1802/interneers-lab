@@ -30,9 +30,14 @@ class ProductDetailView(APIView):
         return Response(serialize_product(product))
 
     def put(self, request, pk):
-        product = ProductService.update_product(pk, request.data)
+        try:
+            product = ProductService.update_product(pk, request.data)
+        except ValueError as e:
+            return Response({"error": str(e)}, status=400)
+
         if not product:
             return Response({"error": "Not found"}, status=404)
+
         return Response(serialize_product(product))
 
     def delete(self, request, pk):

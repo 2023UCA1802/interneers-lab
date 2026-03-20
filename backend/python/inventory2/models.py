@@ -14,7 +14,7 @@ class Product(Document):
 
     meta = {
         "collection": "products",
-        "indexes": ["-created_at", "-updated_at","price","name","category"]
+        "indexes": ["-created_at", "-updated_at","price","name","category","brand"]
     }
 
     def save(self, *args, **kwargs):
