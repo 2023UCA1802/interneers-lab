@@ -8,7 +8,7 @@ class ProductAPITestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
 
-        response = self.client.post("/products/create/", {
+        response = self.client.post("/week2/products/create/", {
             "name": "Laptop",
             "description": "Gaming laptop",
             "category": "Electronics",
@@ -26,10 +26,13 @@ class ProductAPITestCase(TestCase):
 
     #  CREATE
     def test_create_product_success(self):
-        response = self.client.post("/products/create/", {
+        response = self.client.post("/week2/products/create/", {
             "name": "Phone",
+            "description": "Gaming laptop",
+            "category": "Electronics",
+            "brand": "Dell",
             "price": 20000,
-            "quantity": 5
+            "quantity": 5,
         }, format="json")
 
         self.assertEqual(response.status_code, 201)
@@ -37,7 +40,7 @@ class ProductAPITestCase(TestCase):
 
     #  CREATE INVALID
     def test_create_product_invalid(self):
-        response = self.client.post("/products/create/", {
+        response = self.client.post("/week2/products/create/", {
             "price": -100
         }, format="json")
 
@@ -46,36 +49,39 @@ class ProductAPITestCase(TestCase):
 
     # GET ALL
     def test_get_products(self):
-        response = self.client.get("/products/get/")
+        response = self.client.get("/week2/products/get/")
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["status"], "success")
 
     # INVALID PAGINATION
     def test_get_products_invalid_pagination(self):
-        response = self.client.get("/products/get/?page=abc")
+        response = self.client.get("/week2/products/get/?page=abc")
 
         self.assertEqual(response.status_code, 400)
 
     # GET SINGLE
     def test_get_single_product(self):
-        response = self.client.get(f"/products/{self.product_id}/get/")
+        response = self.client.get(f"/week2/products/{self.product_id}/get/")
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["data"]["id"], self.product_id)
 
     # GET INVALID
     def test_get_invalid_product(self):
-        response = self.client.get("/products/999/get/")
+        response = self.client.get("/week2/products/999/get/")
 
         self.assertEqual(response.status_code, 404)
 
     #  UPDATE
     def test_update_product(self):
         response = self.client.put(
-            f"/products/{self.product_id}/update/",
+            f"/week2/products/{self.product_id}/update/",
             {
                 "name": "Updated Laptop",
+                "description": "Gaming laptop",
+                "category": "Electronics",
+                "brand": "Dell",
                 "price": 45000,
                 "quantity": 8
             },
@@ -88,7 +94,7 @@ class ProductAPITestCase(TestCase):
     # UPDATE INVALID DATA
     def test_update_invalid_product(self):
         response = self.client.put(
-            f"/products/{self.product_id}/update/",
+            f"/week2/products/{self.product_id}/update/",
             {
                 "price": -100
             },
@@ -100,7 +106,7 @@ class ProductAPITestCase(TestCase):
     # UPDATE NON-EXISTENT
     def test_update_nonexistent_product(self):
         response = self.client.put(
-            "/products/999/update/",
+            "/week2/products/999/update/",
             {
                 "name": "Test",
                 "price": 100
@@ -112,16 +118,16 @@ class ProductAPITestCase(TestCase):
 
     # DELETE
     def test_delete_product(self):
-        response = self.client.delete(f"/products/{self.product_id}/delete/")
+        response = self.client.delete(f"/week2/products/{self.product_id}/delete/")
 
         self.assertEqual(response.status_code, 200)
 
         # Verify deletion
-        get_response = self.client.get(f"/products/{self.product_id}/")
+        get_response = self.client.get(f"/week2/products/{self.product_id}/")
         self.assertEqual(get_response.status_code, 404)
 
-    # ❌ DELETE INVALID
+    #  DELETE INVALID
     def test_delete_invalid_product(self):
-        response = self.client.delete("/products/999/delete/")
+        response = self.client.delete("/week2/products/999/delete/")
 
         self.assertEqual(response.status_code, 404)

@@ -1,7 +1,9 @@
 from django.test import TestCase
+from unittest.mock import patch, MagicMock
 from rest_framework.test import APIClient
 from inventory2.services.product_service import ProductService
 from inventory2.models import Product
+from types import SimpleNamespace
 
 class ProductValidationTestCase(TestCase):
 
@@ -424,4 +426,58 @@ class ProductAPITestCase(TestCase):
         response = self.client.delete("/products/invalid_id/")
 
         self.assertIn(response.status_code, [400, 404])
-    
+
+
+
+class ProductServiceMockTest(TestCase):
+
+    # MOCK SUCCESS CASE
+    @patch("inventory2.services.product_service.ProductRepository.create")
+    @patch("inventory2.services.product_service.ProductRepository.find_duplicate")
+    def test_create_product_success(self, mock_filter, mock_create):
+
+        data = {
+            "name": "Laptop",
+            "description": "Gaming laptop",
+            "category": "Electronics",
+            "brand": "Dell",
+            "price": 50000,
+            "quantity": 10
+        }
+
+        # STUB: No duplicate
+        mock_filter.return_value = None
+
+        # STUB: Fake product
+        mock_product = SimpleNamespace(**data)
+        mock_create.return_value = mock_product
+
+        result = ProductService.create_product(data)
+
+        self.assertEqual(result.name, "Laptop")
+        self.assertEqual(result.price, 50000)
+
+        mock_filter.assert_called_once()
+        mock_create.assert_called_once()
+
+
+    # DUPLICATE PRODUCT
+    @patch("inventory2.services.product_service.ProductRepository.find_duplicate")
+    def test_duplicate_product(self, mock_filter):
+
+        data = {
+            "name": "Laptop",
+            "description": "Gaming laptop",
+            "category": "Electronics",
+            "brand": "Dell",
+            "price": 20000,
+            "quantity": 50
+        }
+
+        # STUB: Product already exists
+        mock_filter.return_value.exists.return_value = True
+
+        with self.assertRaises(ValueError):
+            ProductService.create_product(data)
+
+        mock_filter.assert_called_once()
