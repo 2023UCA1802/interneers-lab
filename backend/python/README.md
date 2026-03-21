@@ -489,4 +489,9 @@ backend/python
 │   └── test/infrastructure # The Test
 │       └── test_health.py  # The file storing some tests which are conducted on it
 ---
+```
+## Documentation
 
+- [Week 1 Guide](/backend/python/README.md)
+- [Week 2 Guide](inventory/README.md)
+- [Week 3 Guide](inventory2/README.md)
