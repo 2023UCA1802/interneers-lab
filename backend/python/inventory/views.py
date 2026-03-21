@@ -1,17 +1,49 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 products = {}
 product_id_counter = 1
 
+product_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        "name": openapi.Schema(type=openapi.TYPE_STRING),
+        "description": openapi.Schema(type=openapi.TYPE_STRING),
+        "category": openapi.Schema(type=openapi.TYPE_STRING),
+        "brand": openapi.Schema(type=openapi.TYPE_STRING),
+        "price": openapi.Schema(type=openapi.TYPE_NUMBER),
+        "quantity": openapi.Schema(type=openapi.TYPE_INTEGER),
+    },
+    required=["name", "price","category","description","brand","quantity"]
+)
 
 def validate_product_data(data):
     errors = {}
 
     if not data.get("name"):
         errors["name"] = "Product name is required."
+
+    if not data.get("category"):
+        errors["category"] = "Product category is required."
+
+    if not data.get("description"):
+        errors["description"] = "Product description is required."
+
+    if not data.get("brand"):
+        errors["brand"] = "Product brand is required."
+
+    if not data.get("quantity"):
+        errors["quantity"] = "Product quantity is required."
+    else:
+        try:
+            quantity = int(data["quantity"])
+            if quantity < 0:
+                errors["quantity"] = "Quantity cannot be negative."
+        except ValueError:
+            errors["quantity"] = "Quantity must be an integer."
 
     if "price" not in data:
         errors["price"] = "Price field is required."
@@ -23,16 +55,18 @@ def validate_product_data(data):
         except ValueError:
             errors["price"] = "Price must be numeric."
 
-    if "quantity" in data:
-        try:
-            quantity = int(data["quantity"])
-            if quantity < 0:
-                errors["quantity"] = "Quantity cannot be negative."
-        except ValueError:
-            errors["quantity"] = "Quantity must be an integer."
 
     return errors
 
+@swagger_auto_schema(
+    method="post",
+    operation_description="Create a new product",
+    request_body=product_schema,
+    responses={
+        201: "Product created successfully",
+        400: "Validation error"
+    }
+)
 @api_view(["POST"])
 def create_product(request):
     global product_id_counter
@@ -72,6 +106,15 @@ def create_product(request):
         status=status.HTTP_201_CREATED
     )
 
+@swagger_auto_schema(
+    method="get",
+    operation_description="Get all products with pagination",
+    manual_parameters=[
+        openapi.Parameter('page', openapi.IN_QUERY, type=openapi.TYPE_INTEGER),
+        openapi.Parameter('page_size', openapi.IN_QUERY, type=openapi.TYPE_INTEGER),
+    ],
+    responses={200: "List of products"}
+)
 @api_view(["GET"])
 def get_products(request):
 
@@ -113,6 +156,14 @@ def get_products(request):
         }
     )
 
+@swagger_auto_schema(
+    method="get",
+    operation_description="Get product by ID",
+    responses={
+        200: "Product found",
+        404: "Product not found"
+    }
+)
 @api_view(["GET"])
 def get_product(request, product_id):
 
@@ -134,6 +185,16 @@ def get_product(request, product_id):
         }
     )
 
+@swagger_auto_schema(
+    method="put",
+    operation_description="Update an existing product",
+    request_body=product_schema,
+    responses={
+        200: "Product updated successfully",
+        400: "Validation error",
+        404: "Product not found"
+    }
+)
 @api_view(['PUT'])
 def update_product(request, product_id):
 
@@ -160,6 +221,14 @@ def update_product(request, product_id):
 
     return Response(product)
 
+@swagger_auto_schema(
+    method="delete",
+    operation_description="Delete a product",
+    responses={
+        200: "Deleted successfully",
+        404: "Product not found"
+    }
+)
 @api_view(['DELETE'])
 def delete_product(request, product_id):
 

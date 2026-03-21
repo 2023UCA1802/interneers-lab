@@ -42,7 +42,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/', hello_name),
     path('api/', include("api.urls")),
-    path('',include("inventory.urls")),
+    path('week2/',include("inventory.urls")),
     path('',include("inventory2.urls")),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0)),
