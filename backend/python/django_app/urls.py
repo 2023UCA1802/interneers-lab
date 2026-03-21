@@ -14,6 +14,10 @@
 from django.contrib import admin
 from django.urls import path,include
 from django.http import JsonResponse
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
 
 def hello_name(request):
     """
@@ -24,12 +28,25 @@ def hello_name(request):
     name = request.GET.get("name", "World")
     return JsonResponse({"message": f"Hello, {name}!"})
 
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Product API",
+        default_version='v1',
+        description="API documentation for Product Management",
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/', hello_name),
     path('api/', include("api.urls")),
     path('',include("inventory.urls")),
     path('',include("inventory2.urls")),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0)),
+
     # Example usage: /hello/?name=Bob
     # returns {"message": "Hello, Bob!"}
 ]
