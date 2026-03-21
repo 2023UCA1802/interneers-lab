@@ -28,7 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/', hello_name),
     path('api/', include("api.urls")),
-    # path('',include("inventory.urls")),
+    path('',include("inventory.urls")),
     path('',include("inventory2.urls")),
     # Example usage: /hello/?name=Bob
     # returns {"message": "Hello, Bob!"}

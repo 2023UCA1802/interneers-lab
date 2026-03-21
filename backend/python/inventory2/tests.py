@@ -28,6 +28,24 @@ class ProductValidationTestCase(TestCase):
         self.assertEqual(product.price,50000)
         self.assertEqual(product.quantity,10)
 
+    def test_create_product_noarguments(self):
+
+        data={}
+
+        with self.assertRaises(ValueError):
+           ProductService.create_product(data)
+
+    def test_create_product_twoarguments(self):
+
+        data={
+            "name": "Laptop",
+            "description": "Gaming laptop",
+            
+        }
+
+        with self.assertRaises(ValueError):
+           ProductService.create_product(data)
+
     # Test case for negative price error
     def test_create_product_invalid_price(self):
 
