@@ -80,6 +80,7 @@ class CategoryProductsController(APIView):
 
 class AddRemoveProductController(APIView):
 
+
     @swagger_auto_schema(
         operation_description="Add product to category",
         responses={200: "Product added"}
@@ -129,3 +130,17 @@ class BulkUploadController(APIView):
         ProductService.bulk_upload(reader)
 
         return Response({"message": "Bulk upload successful"})
+
+class ProductApi(APIView):
+    @swagger_auto_schema(
+    operation_description="Get products with filters",
+    manual_parameters=[
+        openapi.Parameter('categories', openapi.IN_QUERY, type=openapi.TYPE_STRING),
+        openapi.Parameter('brand_id', openapi.IN_QUERY, type=openapi.TYPE_STRING),
+        openapi.Parameter('name', openapi.IN_QUERY, type=openapi.TYPE_STRING),
+    ],
+    )
+    def get(self, request):
+        params = request.GET.dict()
+        products = ProductService.get_all_products(params)
+        return Response([product_serializer(p) for p in products])

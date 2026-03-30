@@ -10,4 +10,5 @@ urlpatterns = [
     path('categories/<str:category_id>/products/<str:product_id>/', AddRemoveProductController.as_view()),
 
     path('categories/bulk-upload/', BulkUploadController.as_view()),
+    path('categories/products/', ProductApi.as_view()),
 ]
