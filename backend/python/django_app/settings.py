@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "shared",
     "inventory",
     'inventory2',
+    "inventory3",
     "rest_framework",
     "drf_yasg",
 ]
