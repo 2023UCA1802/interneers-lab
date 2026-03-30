@@ -3,26 +3,20 @@ from mongoengine import Document,StringField,ReferenceField,ListField,Validation
 
 class Brand(Document):
     name = StringField(required=True, unique=True)
-    description = StringField(required=True, unique=True)
+    description = StringField(required=True)
 
 
 class ProductCategory(Document):
     name = StringField(required=True, unique=True)
-    description = StringField(required=True, unique=True)
+    description = StringField(required=True)
 
 
 
 class Product(Document):
     name = StringField(required=True)
-
-    # Initially allow null=True for migration
-    brand = ReferenceField(Brand, required=False)
+    brand = ReferenceField(Brand, required=True)
 
     categories = ListField(
-        ReferenceField(ProductCategory)
+        ReferenceField(ProductCategory, required=True)
     )
 
-    def clean(self):
-        # Enforce validation
-        if not self.brand:
-            raise ValidationError("Product must have a brand")
