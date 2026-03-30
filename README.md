@@ -11,6 +11,7 @@ Welcome to the **Interneers Lab** repository! This serves as a minimal starter k
 
 ### Project structure
 
+
 ```
 backend/
   go/          # Golang backend (see backend/go/README.md)
