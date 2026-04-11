@@ -168,6 +168,7 @@ class CategoryProductRelationTest(unittest.TestCase):
 
 
 class ProductServiceMockTest(unittest.TestCase):
+    
 
     @patch("inventory3.services.product_service.ProductRepository.save")
     @patch("inventory3.services.product_service.Product.objects")
@@ -221,6 +222,11 @@ class ProductServiceMockTest(unittest.TestCase):
             ProductService.create_product(data)
 
 class CategoryServiceMockTest(unittest.TestCase):
+    def setUp(self):
+        Product.drop_collection()
+        Brand.drop_collection()
+        ProductCategory.drop_collection()
+
 
     @patch("inventory3.services.category_service.CategoryRepository.create")
     @patch("inventory3.services.category_service.CategoryRepository.get_all")
@@ -252,6 +258,11 @@ class CategoryServiceMockTest(unittest.TestCase):
             })
 
 class ProductBulkMockTest(unittest.TestCase):
+    def setUp(self):
+        Product.drop_collection()
+        Brand.drop_collection()
+        ProductCategory.drop_collection()
+
 
     @patch("inventory3.services.product_service.ProductRepository.bulk_insert")
     @patch("inventory3.services.product_service.Brand")
@@ -275,6 +286,11 @@ class ProductBulkMockTest(unittest.TestCase):
 
 
 class CategoryServiceUnitTest(unittest.TestCase):
+    def setUp(self):
+        Product.drop_collection()
+        Brand.drop_collection()
+        ProductCategory.drop_collection()
+
 
     # 1. Create Category Success
     @patch("inventory3.services.category_service.CategoryRepository.create")
@@ -404,6 +420,11 @@ class CategoryServiceUnitTest(unittest.TestCase):
 
 
 class ProductServiceParameterizedTest(unittest.TestCase):
+    def setUp(self):
+        Product.drop_collection()
+        Brand.drop_collection()
+        ProductCategory.drop_collection()
+
 
     # Invalid Inputs (name, brand_id)
     @parameterized.expand([
@@ -467,6 +488,11 @@ class ProductServiceParameterizedTest(unittest.TestCase):
 
 
 class CategoryServiceParameterizedTest(unittest.TestCase):
+    def setUp(self):
+        Product.drop_collection()
+        Brand.drop_collection()
+        ProductCategory.drop_collection()
+
 
     # Invalid category names
     @parameterized.expand([
