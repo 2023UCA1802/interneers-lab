@@ -7,7 +7,7 @@ class Inventory3Config(AppConfig):
     name = 'inventory3'
     
     def ready(self):
-        seed_categories()
-        seed_test_data()
+        # seed_categories()
+        # seed_test_data()
         migrate_products()
 

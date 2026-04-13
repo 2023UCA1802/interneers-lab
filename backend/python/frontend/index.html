@@ -2,20 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Products</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Manager</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <header>
+        <h1>Inventory Manager</h1>
+        <p>Simple and intuitive workspace</p>
+    </header>
 
-    <h1>Product List</h1>
+    <main>
+        <div id="message"></div>
 
-    <div id="product-container"></div>
+        <div class="panels">
+            <section class="panel">
+                <h2>Manage Data</h2>
+                <button onclick="fetchCategories()">Get All Categories</button>
+                <button onclick="fetchProducts()">Get All Products</button>
+                
+                <hr>
+                
+                <h3>Filter by Category</h3>
+                <input type="text" id="filter_cat_id" placeholder="Category ID" />
+                <button onclick="fetchCategoryProducts()">Get Products</button>
+            </section>
 
-    <div class="product-card">
-    <h2>Product Name</h2>
-    <p>Brand: Apple</p>
-    <p>Categories: Electronics</p>
-</div>
+            <section class="panel">
+                <h2>Add Category</h2>
+                <input type="text" id="cat_name" placeholder="Category Name" />
+                <input type="text" id="cat_desc" placeholder="Category Description" />
+                <button class="primary" onclick="addCategory()">Add Category</button>
+            </section>
+
+            <section class="panel">
+                <h2>Assign Product to Category</h2>
+                <input type="text" id="assign_cat_id" placeholder="Category ID" />
+                <input type="text" id="assign_prod_id" placeholder="Product ID" />
+                <button class="primary" onclick="addProductToCategory()">Assign</button>
+            </section>
+        </div>
+
+        <section class="results">
+            <h2>Results</h2>
+            <div id="data-container">
+                <div class="empty-state">No data loaded.</div>
+            </div>
+        </section>
+    </main>
+
     <script src="script.js"></script>
 </body>
 </html>
