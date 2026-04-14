@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory Manager</title>
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -20,11 +24,14 @@
                 <h2>Manage Data</h2>
                 <button onclick="fetchCategories()">Get All Categories</button>
                 <button onclick="fetchProducts()">Get All Products</button>
+                <button onclick="fetchBrands()">Get All Brands</button>
                 
                 <hr>
                 
                 <h3>Filter by Category</h3>
-                <input type="text" id="filter_cat_id" placeholder="Category ID" />
+                <select id="filter_cat_id">
+                    <option value="">Select Category...</option>
+                </select>
                 <button onclick="fetchCategoryProducts()">Get Products</button>
             </section>
 
@@ -36,17 +43,44 @@
             </section>
 
             <section class="panel">
-                <h2>Assign Product to Category</h2>
-                <input type="text" id="assign_cat_id" placeholder="Category ID" />
-                <input type="text" id="assign_prod_id" placeholder="Product ID" />
+                <h2>Create & Assign Product</h2>
+                <select id="new_prod_cat_id">
+                    <option value="">Select Category...</option>
+                </select>
+                <input type="text" id="new_prod_name" placeholder="Product Name" />
+                <select id="new_prod_brand_id">
+                    <option value="">Select Brand...</option>
+                </select>
+                <button class="primary" onclick="addNewProduct()">Create & Assign</button>
+            </section>
+
+            <section class="panel">
+                <h2>Assign Existing Product</h2>
+                <select id="assign_cat_id">
+                    <option value="">Select Category...</option>
+                </select>
+                <select id="assign_prod_id">
+                    <option value="">Select Product...</option>
+                </select>
                 <button class="primary" onclick="addProductToCategory()">Assign</button>
             </section>
 
             <section class="panel">
                 <h2>Remove Product from Category</h2>
-                <input type="text" id="rem_cat_id" placeholder="Category ID" />
-                <input type="text" id="rem_prod_id" placeholder="Product ID" />
+                <select id="rem_cat_id">
+                    <option value="">Select Category...</option>
+                </select>
+                <select id="rem_prod_id">
+                    <option value="">Select Product...</option>
+                </select>
                 <button class="primary" style="background-color: #cc0000; border-color: #aa0000;" onclick="removeProductFromCategory()">Remove</button>
+            </section>
+
+            <section class="panel">
+                <h2>Add Brand</h2>
+                <input type="text" id="brand_name" placeholder="Brand Name" />
+                <input type="text" id="brand_desc" placeholder="Brand Description" />
+                <button class="primary" onclick="addBrand()">Add Brand</button>
             </section>
         </div>
 

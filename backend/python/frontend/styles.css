@@ -1,177 +1,240 @@
+:root {
+    --bg-main: #F4F4F5;
+    --bg-panel: #FFFFFF;
+    --bg-input: #FFFFFF;
+    
+    --text-primary: #18181B;
+    --text-secondary: #71717A;
+    
+    --accent-primary: #3B82F6;
+    --accent-hover: #2563EB;
+    
+    --danger: #EF4444;
+    --danger-hover: #DC2626;
+    
+    --border: #E4E4E7;
+    --border-hover: #A1A1AA;
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    color: #333;
-    background-color: #f7f9fa;
+    font-family: 'Outfit', -apple-system, system-ui, sans-serif;
+    color: var(--text-primary);
+    background-color: var(--bg-main);
     margin: 0;
     padding: 0;
-    line-height: 1.5;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
 }
 
 header {
-    background-color: #fff;
-    padding: 20px 40px;
-    border-bottom: 1px solid #ddd;
+    background: var(--bg-panel);
+    padding: 24px 40px;
+    border-bottom: 1px solid var(--border);
     text-align: center;
+    box-shadow: var(--shadow-sm);
 }
 
 header h1 {
     margin: 0;
-    font-size: 24px;
-    color: #111;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
 }
 
 header p {
-    margin: 5px 0 0 0;
-    color: #666;
+    margin: 4px 0 0 0;
+    color: var(--text-secondary);
+    font-size: 15px;
 }
 
 main {
-    max-width: 1000px;
-    margin: 30px auto;
+    max-width: 1200px;
+    margin: 40px auto;
     padding: 0 20px;
 }
 
 #message {
     text-align: center;
-    font-weight: bold;
+    font-weight: 500;
     min-height: 24px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    font-size: 15px;
+    transition: opacity 0.3s ease;
 }
 
 .panels {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
-    flex-wrap: wrap;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 
 .panel {
-    flex: 1;
-    min-width: 250px;
-    background: #fff;
-    padding: 20px;
+    background: var(--bg-panel);
+    padding: 24px;
     border-radius: 8px;
-    border: 1px solid #ddd;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.panel:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
 }
 
 .panel h2 {
     margin-top: 0;
     font-size: 18px;
-    color: #222;
+    font-weight: 600;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
 }
 
 .panel h3 {
-    font-size: 16px;
-    color: #444;
-    margin: 15px 0 10px 0;
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin: 20px 0 12px 0;
+    font-weight: 500;
 }
 
 hr {
     border: none;
-    border-top: 1px solid #eee;
-    margin: 20px 0;
+    border-top: 1px solid var(--border);
+    margin: 24px 0;
 }
 
-input {
+input, select {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-family: inherit;
     font-size: 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
 button {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #f0f0f0;
-    color: #333;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 10px 16px;
+    margin-bottom: 12px;
+    background: #FFFFFF;
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
+    font-family: inherit;
+    transition: all 0.2s ease;
 }
 
 button:hover {
-    background-color: #e4e4e4;
+    background: #F4F4F5;
+    border-color: var(--border-hover);
+}
+
+button:active {
+    transform: scale(0.98);
 }
 
 button.primary {
-    background-color: #0066cc;
-    color: #fff;
-    border-color: #005bb5;
+    background: var(--accent-primary);
+    color: #FFFFFF;
+    border: 1px solid transparent;
 }
 
 button.primary:hover {
-    background-color: #005bb5;
+    background: var(--accent-hover);
 }
 
 /* Results Section */
 .results h2 {
-    margin-bottom: 15px;
+    margin-bottom: 24px;
     font-size: 20px;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 5px;
+    font-weight: 600;
+    color: var(--text-primary);
 }
 
 #data-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
 }
 
 .product-card {
-    background: #fff;
-    padding: 15px;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    width: calc(33.333% - 15px);
-    box-sizing: border-box;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-
-@media (max-width: 768px) {
-    .product-card {
-        width: calc(50% - 15px);
-    }
-}
-
-@media (max-width: 480px) {
-    .product-card {
-        width: 100%;
-    }
-}
-
-.product-card h3 {
-    margin: 0 0 10px 0;
-    font-size: 16px;
-    color: #111;
-}
-
-.product-card p {
-    margin: 5px 0;
-    font-size: 14px;
-    color: #555;
+    background: var(--bg-panel);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
     display: flex;
     flex-direction: column;
 }
 
-.product-card p b {
-    color: #222;
-    font-size: 12px;
-    text-transform: uppercase;
+.product-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-hover);
+}
+
+.product-card h3 {
+    margin: 0 0 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.product-card p {
+    margin: 6px 0;
+    font-size: 14px;
+    color: var(--text-secondary);
 }
 
 .empty-state {
-    width: 100%;
+    grid-column: 1 / -1;
     text-align: center;
-    padding: 30px;
-    color: #777;
-    background: #fff;
-    border: 1px dashed #ccc;
-    border-radius: 6px;
+    padding: 40px;
+    color: var(--text-secondary);
+    background: var(--bg-panel);
+    border: 1px dashed var(--border-hover);
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+/* Inline Edit Card Fixes */
+.product-card > div[style*="flex-direction: column"] > strong {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    margin-top: 8px;
+}
+
+.product-card button[style*="background-color: #cc0000"],
+.panel button[style*="background-color: #cc0000"] {
+    background: transparent !important;
+    color: var(--danger) !important;
+    border: 1px solid var(--danger) !important;
+}
+
+.product-card button[style*="background-color: #cc0000"]:hover,
+.panel button[style*="background-color: #cc0000"]:hover {
+    background: var(--danger) !important;
+    color: #FFFFFF !important;
 }

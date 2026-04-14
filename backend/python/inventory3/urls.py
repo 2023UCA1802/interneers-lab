@@ -3,10 +3,16 @@ from .views import *
 
 
 urlpatterns = [
+    # Brand endpoints
+    path('brands/', BrandController.as_view()),
+    path('brands/<str:brand_id>/', BrandDetailController.as_view()),
+
+    # Category endpoints
     path('categories/', CategoryController.as_view()),
     path('categories/bulk-upload/', BulkUploadController.as_view()),
     path('categories/products/', ProductApi.as_view()),
-    
+    path('categories/products/<str:product_id>/', ProductDetailController.as_view()),
+
     path('categories/<str:pk>/', CategoryDetailController.as_view()),
 
     path('categories/<str:category_id>/products/', CategoryProductsController.as_view()),

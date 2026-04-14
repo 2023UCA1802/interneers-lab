@@ -7,8 +7,9 @@ from io import TextIOWrapper
 import csv
 from .services.category_service import CategoryService
 from .services.product_service import ProductService
+from .services.brand_service import BrandService
 from .repositories.product_repository import ProductRepository
-from .utils.serializers import category_serializer, product_serializer
+from .utils.serializers import category_serializer, product_serializer, brand_serializer
 
 category_schema = openapi.Schema(
     type=openapi.TYPE_OBJECT,
@@ -18,6 +19,64 @@ category_schema = openapi.Schema(
     },
     required=["name", "description"]
 )
+
+brand_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        "name": openapi.Schema(type=openapi.TYPE_STRING),
+        "description": openapi.Schema(type=openapi.TYPE_STRING),
+    },
+    required=["name", "description"]
+)
+
+
+class BrandController(APIView):
+
+    @swagger_auto_schema(
+        operation_description="Get all brands",
+        responses={200: "List of brands"}
+    )
+    def get(self, request):
+        brands = BrandService.get_all_brands()
+        return Response([brand_serializer(b) for b in brands])
+
+    @swagger_auto_schema(
+        operation_description="Create a new brand",
+        request_body=brand_schema,
+        responses={201: "Brand created", 400: "Validation error"}
+    )
+    def post(self, request):
+        try:
+            brand = BrandService.create_brand(request.data)
+            return Response(brand_serializer(brand), status=201)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+
+
+class BrandDetailController(APIView):
+
+    @swagger_auto_schema(
+        operation_description="Update a brand",
+        request_body=brand_schema,
+        responses={200: "Updated", 400: "Error"}
+    )
+    def put(self, request, brand_id):
+        try:
+            brand = BrandService.update_brand(brand_id, request.data)
+            return Response(brand_serializer(brand))
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+
+    @swagger_auto_schema(
+        operation_description="Delete a brand",
+        responses={200: "Deleted"}
+    )
+    def delete(self, request, brand_id):
+        try:
+            BrandService.delete_brand(brand_id)
+            return Response({"message": "Brand deleted"})
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
 
 class CategoryController(APIView):
 
@@ -65,18 +124,36 @@ class CategoryDetailController(APIView):
     responses={200: "Deleted"}
     )
     def delete(self, request, pk):
-        CategoryService.delete_category(pk)
-        return Response({"message": "Deleted"})
+        try:
+            CategoryService.delete_category(pk)
+            return Response({"message": "Deleted"})
+        except Exception as e:
+            return Response({"error": str(e)}, status=404)
     
 class CategoryProductsController(APIView):
 
     @swagger_auto_schema(
-    operation_description="Delete a category",
-    responses={200: "Deleted"}
+        operation_description="Get products by category",
+        responses={200: "List of products"}
     )
     def get(self, request, category_id):
-        products = CategoryService.get_products(category_id)
-        return Response([product_serializer(p) for p in products])
+        try:
+            products = CategoryService.get_products(category_id)
+            return Response([product_serializer(p) for p in products])
+        except Exception as e:
+            return Response({"error": "Category not found"}, status=404)
+
+    @swagger_auto_schema(
+        operation_description="Create a product and assign it to a category",
+        responses={201: "Created", 400: "Bad Request"}
+    )
+    def post(self, request, category_id):
+        try:
+            product = ProductService.create_product(request.data)
+            CategoryService.add_product(category_id, product)
+            return Response({"message": "Product created and assigned", "product": product_serializer(product)}, status=201)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
 
 class AddRemoveProductController(APIView):
 
@@ -86,18 +163,24 @@ class AddRemoveProductController(APIView):
         responses={200: "Product added"}
     )
     def post(self, request, category_id, product_id):
-        product = ProductRepository.get_by_id(product_id)
-        CategoryService.add_product(category_id, product)
-        return Response({"message": "Added"})
+        try:
+            product = ProductRepository.get_by_id(product_id)
+            CategoryService.add_product(category_id, product)
+            return Response({"message": "Added"})
+        except Exception as e:
+            return Response({"error": "Resource not found"}, status=404)
 
     @swagger_auto_schema(
         operation_description="Remove product from category",
         responses={200: "Product removed"}
     )
     def delete(self, request, category_id, product_id):
-        product = ProductRepository.get_by_id(product_id)
-        CategoryService.remove_product(category_id, product)
-        return Response({"message": "Removed"})
+        try:
+            product = ProductRepository.get_by_id(product_id)
+            CategoryService.remove_product(category_id, product)
+            return Response({"message": "Removed"})
+        except Exception as e:
+            return Response({"error": "Resource not found"}, status=404)
 
 class BulkUploadController(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -144,3 +227,28 @@ class ProductApi(APIView):
         params = request.GET.dict()
         products = ProductService.get_all_products(params)
         return Response([product_serializer(p) for p in products])
+
+
+class ProductDetailController(APIView):
+
+    @swagger_auto_schema(
+        operation_description="Update a product",
+        responses={200: "Updated", 400: "Error"}
+    )
+    def put(self, request, product_id):
+        try:
+            product = ProductService.update_product(product_id, request.data)
+            return Response(product_serializer(product))
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+
+    @swagger_auto_schema(
+        operation_description="Delete a product",
+        responses={200: "Deleted", 404: "Not found"}
+    )
+    def delete(self, request, product_id):
+        try:
+            ProductService.delete_product(product_id)
+            return Response({"message": "Product deleted"})
+        except Exception as e:
+            return Response({"error": str(e)}, status=404)

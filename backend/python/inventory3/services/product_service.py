@@ -107,6 +107,38 @@ class ProductService:
         return ProductRepository.save(product)
 
     @staticmethod
+    def update_product(product_id, data):
+        """
+        Update a product's name.
+
+        Args:
+            product_id (str): ID of the product to update
+            data (dict): Fields to update (name)
+
+        Returns:
+            Product: Updated product document
+
+        Raises:
+            DoesNotExist: If product not found
+        """
+        product = ProductRepository.get_by_id(product_id)
+        if data.get("name"):
+            product.name = data["name"].strip()
+        product.save()
+        return product
+
+    @staticmethod
+    def delete_product(product_id):
+        """
+        Delete a product by ID.
+
+        Args:
+            product_id (str): ID of the product to delete
+        """
+        from ..models import Product
+        Product.objects(id=product_id).delete()
+
+    @staticmethod
     def bulk_upload(csv_reader):
         """
         Bulk upload products from CSV input.
