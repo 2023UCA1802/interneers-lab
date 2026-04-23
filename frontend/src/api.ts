@@ -4,6 +4,8 @@ const API_BASE = "http://127.0.0.1:8001";
 export const api = {
   // Categories
   getCategories: () => fetch(`${API_BASE}/categories/`).then(handleResponse),
+  getCategory: (id: string | number) =>
+    fetch(`${API_BASE}/categories/${id}/`).then(handleResponse),
   createCategory: (name: string, description: string) =>
     fetch(`${API_BASE}/categories/`, {
       method: "POST",
@@ -18,12 +20,14 @@ export const api = {
     }).then(handleResponse),
   deleteCategory: (id: string | number) =>
     fetch(`${API_BASE}/categories/${id}/`, { method: "DELETE" }).then(
-      () => handleResponse,
+      handleResponse,
     ),
 
   // Products
   getAllProducts: () =>
     fetch(`${API_BASE}/categories/products/`).then(handleResponse),
+  getProduct: (id: string | number) =>
+    fetch(`${API_BASE}/categories/products/${id}/`).then(handleResponse),
   getCategoryProducts: (catId: string | number) =>
     fetch(`${API_BASE}/categories/${catId}/products/`).then(handleResponse),
   createProduct: (

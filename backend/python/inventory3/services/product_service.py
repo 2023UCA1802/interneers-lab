@@ -59,6 +59,10 @@ class ProductService:
         return query
 
     @staticmethod
+    def get_product_by_id(product_id):
+        return ProductRepository.get_by_id(product_id)
+
+    @staticmethod
     def create_product(data):
         """
         Create a new product with validation.

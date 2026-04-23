@@ -108,6 +108,17 @@ class CategoryController(APIView):
 class CategoryDetailController(APIView):
 
     @swagger_auto_schema(
+        operation_description="Get a category",
+        responses={200: "Category detail", 404: "Not found"}
+    )
+    def get(self, request, pk):
+        try:
+            category = CategoryService.get_category_by_id(pk)
+            return Response(category_serializer(category))
+        except Exception as e:
+            return Response({"error": str(e)}, status=404)
+
+    @swagger_auto_schema(
     operation_description="Update a category",
     request_body=category_schema,
     responses={200: "Updated", 400: "Error"}
@@ -141,7 +152,7 @@ class CategoryProductsController(APIView):
             products = CategoryService.get_products(category_id)
             return Response([product_serializer(p) for p in products])
         except Exception as e:
-            return Response({"error": "Category not found"}, status=404)
+            return Response({"error": str(e)}, status=400)
 
     @swagger_auto_schema(
         operation_description="Create a product and assign it to a category",
@@ -168,7 +179,7 @@ class AddRemoveProductController(APIView):
             CategoryService.add_product(category_id, product)
             return Response({"message": "Added"})
         except Exception as e:
-            return Response({"error": "Resource not found"}, status=404)
+            return Response({"error": str(e)}, status=400)
 
     @swagger_auto_schema(
         operation_description="Remove product from category",
@@ -180,7 +191,7 @@ class AddRemoveProductController(APIView):
             CategoryService.remove_product(category_id, product)
             return Response({"message": "Removed"})
         except Exception as e:
-            return Response({"error": "Resource not found"}, status=404)
+            return Response({"error": str(e)}, status=400)
 
 class BulkUploadController(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -224,12 +235,26 @@ class ProductApi(APIView):
     ],
     )
     def get(self, request):
-        params = request.GET.dict()
-        products = ProductService.get_all_products(params)
-        return Response([product_serializer(p) for p in products])
+        try:
+            params = request.GET.dict()
+            products = ProductService.get_all_products(params)
+            return Response([product_serializer(p) for p in products])
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
 
 
 class ProductDetailController(APIView):
+
+    @swagger_auto_schema(
+        operation_description="Get a product",
+        responses={200: "Product detail", 404: "Not found"}
+    )
+    def get(self, request, product_id):
+        try:
+            product = ProductService.get_product_by_id(product_id)
+            return Response(product_serializer(product))
+        except Exception as e:
+            return Response({"error": str(e)}, status=404)
 
     @swagger_auto_schema(
         operation_description="Update a product",

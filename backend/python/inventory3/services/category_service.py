@@ -48,6 +48,13 @@ class CategoryService:
         return CategoryRepository.get_all()
 
     @staticmethod
+    def get_category_by_id(category_id):
+        category = CategoryRepository.get_by_id(category_id)
+        if not category:
+            raise ValueError("Category not found")
+        return category
+
+    @staticmethod
     def update_category(category_id, data):
         """
         Update an existing category.

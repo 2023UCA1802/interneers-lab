@@ -1,6 +1,13 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { Category, Brand, Product, DataType, Toast as ToastType } from "../types";
+import {
+  Category,
+  Brand,
+  Product,
+  DataType,
+  Toast as ToastType,
+} from "../types";
 import { api } from "../api";
+import { Link } from "react-router-dom";
 import DataResults from "./DataResults";
 import Toast from "./Toast";
 import "./InventoryManager.scss";
@@ -31,11 +38,14 @@ const InventoryManager: React.FC = () => {
 
   const addToast = useCallback((message: string, isError = false) => {
     const id = ++toastIdRef.current;
-    setToasts(prev => [...prev, { id, message, type: isError ? "error" : "success" }]);
+    setToasts((prev) => [
+      ...prev,
+      { id, message, type: isError ? "error" : "success" },
+    ]);
   }, []);
 
   const removeToast = useCallback((id: number) => {
-    setToasts(prev => prev.filter(t => t.id !== id));
+    setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
   const refreshDropdowns = useCallback(async () => {
@@ -60,7 +70,7 @@ const InventoryManager: React.FC = () => {
   const showResults = async (
     fetcher: () => Promise<any>,
     type: DataType,
-    label: string
+    label: string,
   ) => {
     setResultLoading(true);
     try {
@@ -75,11 +85,13 @@ const InventoryManager: React.FC = () => {
   };
 
   const refreshResults = useCallback(() => {
-    if (resultType === "category") showResults(api.getCategories, "category", "categories");
-    else if (resultType === "brand") showResults(api.getBrands, "brand", "brands");
+    if (resultType === "category")
+      showResults(api.getCategories, "category", "categories");
+    else if (resultType === "brand")
+      showResults(api.getBrands, "brand", "brands");
     else showResults(api.getAllProducts, "product", "products");
     refreshDropdowns();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resultType, refreshDropdowns]);
 
   return (
@@ -90,7 +102,7 @@ const InventoryManager: React.FC = () => {
           <span className="inv__sidebar-title">Inventory</span>
         </div>
         <nav className="inv__nav">
-          {NAV_ITEMS.map(item => (
+          {NAV_ITEMS.map((item) => (
             <button
               key={item.key}
               className={`inv__nav-item ${activeSection === item.key ? "inv__nav-item--active" : ""}`}
@@ -152,7 +164,10 @@ const InventoryManager: React.FC = () => {
               <span className="inv__results-count">{results.length} items</span>
             )}
             {results.length > 0 && (
-              <button className="btn btn--ghost btn--sm" onClick={refreshResults}>
+              <button
+                className="btn btn--ghost btn--sm"
+                onClick={refreshResults}
+              >
                 ↻ Refresh
               </button>
             )}
@@ -191,18 +206,29 @@ const BrowseSection: React.FC<{
   return (
     <div className="inv__section">
       <h1 className="inv__section-title">Browse & Filter</h1>
-      <p className="inv__section-desc">Quickly fetch and view all data or filter by category.</p>
+      <p className="inv__section-desc">
+        Quickly fetch and view all data or filter by category.
+      </p>
 
       <div className="form-card">
         <h3 className="form-card__title">Quick Fetch</h3>
         <div className="btn-group">
-          <button className="btn btn--primary" onClick={() => onShow(api.getCategories, "category", "categories")}>
+          <button
+            className="btn btn--primary"
+            onClick={() => onShow(api.getCategories, "category", "categories")}
+          >
             All Categories
           </button>
-          <button className="btn btn--primary" onClick={() => onShow(api.getAllProducts, "product", "products")}>
+          <button
+            className="btn btn--primary"
+            onClick={() => onShow(api.getAllProducts, "product", "products")}
+          >
             All Products
           </button>
-          <button className="btn btn--primary" onClick={() => onShow(api.getBrands, "brand", "brands")}>
+          <button
+            className="btn btn--primary"
+            onClick={() => onShow(api.getBrands, "brand", "brands")}
+          >
             All Brands
           </button>
         </div>
@@ -214,17 +240,25 @@ const BrowseSection: React.FC<{
           <select
             id="browse-filter-cat"
             value={filterCatId}
-            onChange={e => setFilterCatId(e.target.value)}
+            onChange={(e) => setFilterCatId(e.target.value)}
           >
             <option value="">Select Category…</option>
-            {categories.map(c => (
-              <option key={c.id} value={c.id}>{c.name}</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
             ))}
           </select>
           <button
             className="btn btn--secondary"
             disabled={!filterCatId}
-            onClick={() => onShow(() => api.getCategoryProducts(filterCatId), "product", "products")}
+            onClick={() =>
+              onShow(
+                () => api.getCategoryProducts(filterCatId),
+                "product",
+                "products",
+              )
+            }
           >
             Get Products
           </button>
@@ -245,16 +279,23 @@ const CategoriesSection: React.FC<{
   const [busy, setBusy] = useState(false);
 
   const handleAdd = async () => {
-    if (!name.trim() || !desc.trim()) { onToast("Please fill all fields", true); return; }
+    if (!name.trim() || !desc.trim()) {
+      onToast("Please fill all fields", true);
+      return;
+    }
     setBusy(true);
     try {
       await api.createCategory(name.trim(), desc.trim());
       onToast("Category added successfully");
-      setName(""); setDesc("");
+      setName("");
+      setDesc("");
       refreshDropdowns();
       onShow(api.getCategories, "category", "categories");
-    } catch (e: any) { onToast(e.message, true); }
-    finally { setBusy(false); }
+    } catch (e: any) {
+      onToast(e.message, true);
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -266,22 +307,46 @@ const CategoriesSection: React.FC<{
         <h3 className="form-card__title">Add New Category</h3>
         <div className="form-field">
           <label htmlFor="cat-name">Category Name</label>
-          <input id="cat-name" type="text" placeholder="e.g. Electronics" value={name} onChange={e => setName(e.target.value)} />
+          <input
+            id="cat-name"
+            type="text"
+            placeholder="e.g. Electronics"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
         </div>
         <div className="form-field">
           <label htmlFor="cat-desc">Description</label>
-          <input id="cat-desc" type="text" placeholder="Short description…" value={desc} onChange={e => setDesc(e.target.value)} />
+          <input
+            id="cat-desc"
+            type="text"
+            placeholder="Short description…"
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
+          />
         </div>
-        <button className="btn btn--primary" onClick={handleAdd} disabled={busy}>
+        <button
+          className="btn btn--primary"
+          onClick={handleAdd}
+          disabled={busy}
+        >
           {busy ? "Adding…" : "＋ Add Category"}
         </button>
       </div>
 
       <div className="form-card">
         <h3 className="form-card__title">View Categories</h3>
-        <button className="btn btn--secondary" onClick={() => onShow(api.getCategories, "category", "categories")}>
-          Load All Categories
-        </button>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <button
+            className="btn btn--secondary"
+            onClick={() => onShow(api.getCategories, "category", "categories")}
+          >
+            Load All Categories Here
+          </button>
+          <Link to="/categories" className="btn btn--primary">
+            Go to Categories Page
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -313,66 +378,114 @@ const ProductsSection: React.FC<{
   const [remBusy, setRemBusy] = useState(false);
 
   const handleCreate = async () => {
-    if (!newProdCat || !newProdName.trim() || !newProdBrand) { onToast("Please fill all fields", true); return; }
+    if (!newProdCat || !newProdName.trim() || !newProdBrand) {
+      onToast("Please fill all fields", true);
+      return;
+    }
     setCreateBusy(true);
     try {
       await api.createProduct(newProdCat, newProdName.trim(), newProdBrand);
       onToast("Product created and assigned");
-      setNewProdCat(""); setNewProdName(""); setNewProdBrand("");
+      setNewProdCat("");
+      setNewProdName("");
+      setNewProdBrand("");
       refreshDropdowns();
       onShow(api.getAllProducts, "product", "products");
-    } catch (e: any) { onToast(e.message, true); }
-    finally { setCreateBusy(false); }
+    } catch (e: any) {
+      onToast(e.message, true);
+    } finally {
+      setCreateBusy(false);
+    }
   };
 
   const handleAssign = async () => {
-    if (!assignCat || !assignProd) { onToast("Please select both fields", true); return; }
+    if (!assignCat || !assignProd) {
+      onToast("Please select both fields", true);
+      return;
+    }
     setAssignBusy(true);
     try {
       await api.assignProduct(assignCat, assignProd);
       onToast("Product assigned to category");
-      setAssignCat(""); setAssignProd("");
-    } catch (e: any) { onToast(e.message, true); }
-    finally { setAssignBusy(false); }
+      setAssignCat("");
+      setAssignProd("");
+    } catch (e: any) {
+      onToast(e.message, true);
+    } finally {
+      setAssignBusy(false);
+    }
   };
 
   const handleRemove = async () => {
-    if (!remCat || !remProd) { onToast("Please select both fields", true); return; }
+    if (!remCat || !remProd) {
+      onToast("Please select both fields", true);
+      return;
+    }
     setRemBusy(true);
     try {
       await api.removeFromCategory(remCat, remProd);
       onToast("Product removed from category");
-      setRemCat(""); setRemProd("");
-    } catch (e: any) { onToast(e.message, true); }
-    finally { setRemBusy(false); }
+      setRemCat("");
+      setRemProd("");
+    } catch (e: any) {
+      onToast(e.message, true);
+    } finally {
+      setRemBusy(false);
+    }
   };
 
   return (
     <div className="inv__section">
       <h1 className="inv__section-title">Products</h1>
-      <p className="inv__section-desc">Create products, assign them to categories, or remove them.</p>
+      <p className="inv__section-desc">
+        Create products, assign them to categories, or remove them.
+      </p>
 
       <div className="form-card">
         <h3 className="form-card__title">Create & Assign Product</h3>
         <div className="form-field">
           <label>Category</label>
-          <select value={newProdCat} onChange={e => setNewProdCat(e.target.value)}>
+          <select
+            value={newProdCat}
+            onChange={(e) => setNewProdCat(e.target.value)}
+          >
             <option value="">Select Category…</option>
-            {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
           </select>
         </div>
         <div className="form-field">
           <label htmlFor="new-prod-name">Product Name</label>
-          <input id="new-prod-name" type="text" placeholder="e.g. MacBook Pro" value={newProdName} onChange={e => setNewProdName(e.target.value)} />
+          <input
+            id="new-prod-name"
+            type="text"
+            placeholder="e.g. MacBook Pro"
+            value={newProdName}
+            onChange={(e) => setNewProdName(e.target.value)}
+          />
         </div>
         <div className="form-field">
           <label>Brand</label>
-          <select value={newProdBrand} onChange={e => setNewProdBrand(e.target.value)}>
+          <select
+            value={newProdBrand}
+            onChange={(e) => setNewProdBrand(e.target.value)}
+          >
             <option value="">Select Brand…</option>
-            {brands.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
+            {brands.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.name}
+              </option>
+            ))}
           </select>
         </div>
-        <button className="btn btn--primary" onClick={handleCreate} disabled={createBusy}>
+        <button
+          className="btn btn--primary"
+          onClick={handleCreate}
+          disabled={createBusy}
+        >
           {createBusy ? "Creating…" : "＋ Create & Assign"}
         </button>
       </div>
@@ -381,19 +494,37 @@ const ProductsSection: React.FC<{
         <h3 className="form-card__title">Assign Existing Product</h3>
         <div className="form-field">
           <label>Category</label>
-          <select value={assignCat} onChange={e => setAssignCat(e.target.value)}>
+          <select
+            value={assignCat}
+            onChange={(e) => setAssignCat(e.target.value)}
+          >
             <option value="">Select Category…</option>
-            {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
           </select>
         </div>
         <div className="form-field">
           <label>Product</label>
-          <select value={assignProd} onChange={e => setAssignProd(e.target.value)}>
+          <select
+            value={assignProd}
+            onChange={(e) => setAssignProd(e.target.value)}
+          >
             <option value="">Select Product…</option>
-            {products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+            {products.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
           </select>
         </div>
-        <button className="btn btn--secondary" onClick={handleAssign} disabled={assignBusy}>
+        <button
+          className="btn btn--secondary"
+          onClick={handleAssign}
+          disabled={assignBusy}
+        >
           {assignBusy ? "Assigning…" : "↳ Assign"}
         </button>
       </div>
@@ -402,26 +533,41 @@ const ProductsSection: React.FC<{
         <h3 className="form-card__title">Remove Product from Category</h3>
         <div className="form-field">
           <label>Category</label>
-          <select value={remCat} onChange={e => setRemCat(e.target.value)}>
+          <select value={remCat} onChange={(e) => setRemCat(e.target.value)}>
             <option value="">Select Category…</option>
-            {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
           </select>
         </div>
         <div className="form-field">
           <label>Product</label>
-          <select value={remProd} onChange={e => setRemProd(e.target.value)}>
+          <select value={remProd} onChange={(e) => setRemProd(e.target.value)}>
             <option value="">Select Product…</option>
-            {products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+            {products.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
           </select>
         </div>
-        <button className="btn btn--danger" onClick={handleRemove} disabled={remBusy}>
+        <button
+          className="btn btn--danger"
+          onClick={handleRemove}
+          disabled={remBusy}
+        >
           {remBusy ? "Removing…" : "Remove"}
         </button>
       </div>
 
       <div className="form-card">
         <h3 className="form-card__title">View Products</h3>
-        <button className="btn btn--secondary" onClick={() => onShow(api.getAllProducts, "product", "products")}>
+        <button
+          className="btn btn--secondary"
+          onClick={() => onShow(api.getAllProducts, "product", "products")}
+        >
           Load All Products
         </button>
       </div>
@@ -440,16 +586,23 @@ const BrandsSection: React.FC<{
   const [busy, setBusy] = useState(false);
 
   const handleAdd = async () => {
-    if (!name.trim() || !desc.trim()) { onToast("Please fill all brand fields", true); return; }
+    if (!name.trim() || !desc.trim()) {
+      onToast("Please fill all brand fields", true);
+      return;
+    }
     setBusy(true);
     try {
       await api.createBrand(name.trim(), desc.trim());
       onToast("Brand added successfully");
-      setName(""); setDesc("");
+      setName("");
+      setDesc("");
       refreshDropdowns();
       onShow(api.getBrands, "brand", "brands");
-    } catch (e: any) { onToast(e.message, true); }
-    finally { setBusy(false); }
+    } catch (e: any) {
+      onToast(e.message, true);
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -461,20 +614,39 @@ const BrandsSection: React.FC<{
         <h3 className="form-card__title">Add New Brand</h3>
         <div className="form-field">
           <label htmlFor="brand-name">Brand Name</label>
-          <input id="brand-name" type="text" placeholder="e.g. Apple" value={name} onChange={e => setName(e.target.value)} />
+          <input
+            id="brand-name"
+            type="text"
+            placeholder="e.g. Apple"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
         </div>
         <div className="form-field">
           <label htmlFor="brand-desc">Description</label>
-          <input id="brand-desc" type="text" placeholder="Short description…" value={desc} onChange={e => setDesc(e.target.value)} />
+          <input
+            id="brand-desc"
+            type="text"
+            placeholder="Short description…"
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
+          />
         </div>
-        <button className="btn btn--primary" onClick={handleAdd} disabled={busy}>
+        <button
+          className="btn btn--primary"
+          onClick={handleAdd}
+          disabled={busy}
+        >
           {busy ? "Adding…" : "＋ Add Brand"}
         </button>
       </div>
 
       <div className="form-card">
         <h3 className="form-card__title">View Brands</h3>
-        <button className="btn btn--secondary" onClick={() => onShow(api.getBrands, "brand", "brands")}>
+        <button
+          className="btn btn--secondary"
+          onClick={() => onShow(api.getBrands, "brand", "brands")}
+        >
           Load All Brands
         </button>
       </div>

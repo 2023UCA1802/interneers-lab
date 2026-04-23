@@ -17,10 +17,10 @@ const Toast: React.FC<ToastProps> = ({ toasts, removeToast }) => {
   );
 };
 
-const ToastItem: React.FC<{ toast: ToastType; removeToast: (id: number) => void }> = ({
-  toast,
-  removeToast,
-}) => {
+const ToastItem: React.FC<{
+  toast: ToastType;
+  removeToast: (id: number) => void;
+}> = ({ toast, removeToast }) => {
   useEffect(() => {
     const timer = setTimeout(() => removeToast(toast.id), 3500);
     return () => clearTimeout(timer);
@@ -28,7 +28,9 @@ const ToastItem: React.FC<{ toast: ToastType; removeToast: (id: number) => void 
 
   return (
     <div className={`toast toast--${toast.type}`}>
-      <span className="toast__icon">{toast.type === "success" ? "✓" : "✕"}</span>
+      <span className="toast__icon">
+        {toast.type === "success" ? "✓" : "✕"}
+      </span>
       <span className="toast__message">{toast.message}</span>
       <button className="toast__close" onClick={() => removeToast(toast.id)}>
         ×

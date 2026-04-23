@@ -6,7 +6,7 @@
 
 .result-card {
   background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.10);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   padding: 20px;
   display: flex;
@@ -23,10 +23,11 @@
     border-radius: 8px;
     opacity: 0;
     transition: opacity 0.25s ease;
+    pointer-events: none;
   }
 
   &:hover {
-    border-color: rgba(0, 0, 0, 0.20);
+    border-color: rgba(0, 0, 0, 0.2);
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 
@@ -42,7 +43,11 @@
 
   &--category {
     &::before {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.04), transparent);
+      background: linear-gradient(
+        135deg,
+        rgba(59, 130, 246, 0.04),
+        transparent
+      );
     }
   }
 
@@ -69,26 +74,28 @@
     border-radius: 10px;
 
     .result-card--category & {
-      background: rgba(59, 130, 246, 0.10);
+      background: rgba(59, 130, 246, 0.1);
       color: #1d4ed8;
-      border: 1px solid rgba(59, 130, 246, 0.20);
+      border: 1px solid rgba(59, 130, 246, 0.2);
     }
 
     .result-card--brand & {
-      background: rgba(5, 150, 105, 0.10);
+      background: rgba(5, 150, 105, 0.1);
       color: #065f46;
-      border: 1px solid rgba(5, 150, 105, 0.20);
+      border: 1px solid rgba(5, 150, 105, 0.2);
     }
 
     .result-card--product & {
-      background: rgba(217, 119, 6, 0.10);
+      background: rgba(217, 119, 6, 0.1);
       color: #92400e;
-      border: 1px solid rgba(217, 119, 6, 0.20);
+      border: 1px solid rgba(217, 119, 6, 0.2);
     }
   }
 
   &__view {
     flex: 1;
+    position: relative;
+    z-index: 10;
   }
 
   &__name {
@@ -117,6 +124,8 @@
     flex-direction: column;
     gap: 4px;
     flex: 1;
+    position: relative;
+    z-index: 10;
 
     label {
       font-size: 0.75em;
@@ -135,7 +144,9 @@
       color: #1e293b;
       font-size: 0.9em;
       font-family: inherit;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 
       &:focus {
         outline: none;
@@ -153,6 +164,8 @@
     display: flex;
     gap: 8px;
     margin-top: 4px;
+    position: relative;
+    z-index: 10;
   }
 }
 

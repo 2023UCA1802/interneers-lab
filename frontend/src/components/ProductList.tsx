@@ -2,15 +2,29 @@ import React, { useState, useEffect } from "react";
 import { Product } from "../types";
 import "./ProductList.scss";
 
-export const ProductList: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+interface ProductListProps {
+  products?: Product[];
+  loading?: boolean;
+  error?: string | null;
+}
+
+export const ProductList: React.FC<ProductListProps> = (props) => {
+  const [products, setProducts] = useState<Product[]>(props.products || []);
+  const [loading, setLoading] = useState<boolean>(
+    props.loading !== undefined ? props.loading : true,
+  );
+  const [error, setError] = useState<string | null>(props.error || null);
   const [expandedProductId, setExpandedProductId] = useState<string | null>(
     null,
   );
 
   useEffect(() => {
+    if (props.products) {
+      setProducts(props.products);
+      if (props.loading !== undefined) setLoading(props.loading);
+      if (props.error !== undefined) setError(props.error);
+      return;
+    }
     const fetchProducts = async () => {
       try {
         const response = await fetch(
@@ -28,8 +42,10 @@ export const ProductList: React.FC = () => {
       }
     };
 
-    fetchProducts();
-  }, []);
+    if (!props.products) {
+      fetchProducts();
+    }
+  }, [props.products, props.loading, props.error]);
 
   const toggleProduct = (
     id: string | number,
@@ -50,6 +66,10 @@ export const ProductList: React.FC = () => {
           color: "#64748b",
         }}
       >
+        <div
+          className="inv__spinner"
+          style={{ margin: "0 auto 15px", display: "block" }}
+        />
         Loading products...
       </div>
     );
@@ -101,9 +121,9 @@ export const ProductList: React.FC = () => {
                 <div
                   style={{ display: "flex", alignItems: "center", gap: "15px" }}
                 >
-                  {product.price !== undefined && (
+                  {product.price != null && (
                     <span className="product-price">
-                      ${product.price.toFixed(2)}
+                      ${Number(product.price).toFixed(2)}
                     </span>
                   )}
                   <div

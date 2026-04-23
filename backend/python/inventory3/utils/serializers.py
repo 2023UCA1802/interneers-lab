@@ -1,9 +1,19 @@
 def product_serializer(product):
+    brand_name = "No Brand"
+    try:
+        if product.brand:
+            brand_name = product.brand.name
+    except:
+        pass
+
     return {
         "id": str(product.id),
         "name": product.name,
-        "brand": str(product.brand.id) if product.brand else None,
+        "brand": brand_name,
         "categories": [str(c.id) for c in product.categories],
+        "description": getattr(product, "description", None),
+        "price": getattr(product, "price", None),
+        "stock": getattr(product, "stock", None),
     }
 
 def category_serializer(category):

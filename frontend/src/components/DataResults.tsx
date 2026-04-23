@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { Category, Brand, Product, DataType } from "../types";
 import { api } from "../api";
 import "./DataResults.scss";
@@ -89,7 +90,6 @@ const CategoryCard: React.FC<{
   };
 
   const handleDelete = async () => {
-    if (!window.confirm(`Delete category "${category.name}"?`)) return;
     setBusy(true);
     try {
       await api.deleteCategory(category.id);
@@ -134,13 +134,12 @@ const CategoryCard: React.FC<{
       <div className="result-card__actions">
         {!editing ? (
           <>
-            <button
+            <Link
+              to={`/categories/${category.id}`}
               className="btn btn--secondary"
-              onClick={() => setEditing(true)}
-              disabled={busy}
             >
-              Edit
-            </button>
+              Details
+            </Link>
             <button
               className="btn btn--danger"
               onClick={handleDelete}
@@ -206,7 +205,6 @@ const BrandCard: React.FC<{
   };
 
   const handleDelete = async () => {
-    if (!window.confirm(`Delete brand "${brand.name}"?`)) return;
     setBusy(true);
     try {
       await api.deleteBrand(brand.id);
@@ -322,7 +320,6 @@ const ProductCard: React.FC<{
   };
 
   const handleDelete = async () => {
-    if (!window.confirm(`Delete product "${product.name}"?`)) return;
     setBusy(true);
     try {
       await api.deleteProduct(product.id);
@@ -364,13 +361,9 @@ const ProductCard: React.FC<{
       <div className="result-card__actions">
         {!editing ? (
           <>
-            <button
-              className="btn btn--secondary"
-              onClick={() => setEditing(true)}
-              disabled={busy}
-            >
-              Edit
-            </button>
+            <Link to={`/products/${product.id}`} className="btn btn--secondary">
+              Details
+            </Link>
             <button
               className="btn btn--danger"
               onClick={handleDelete}

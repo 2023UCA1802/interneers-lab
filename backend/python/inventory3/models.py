@@ -1,4 +1,4 @@
-from mongoengine import Document, StringField, ReferenceField, ListField, ValidationError
+from mongoengine import Document, StringField, ReferenceField, ListField, ValidationError, IntField, FloatField
 
 
 class Brand(Document):
@@ -53,6 +53,9 @@ class Product(Document):
     name = StringField(required=True)
 
     brand = ReferenceField(Brand, required=True)
+    description = StringField()
+    price = FloatField()
+    stock = IntField()
 
     categories = ListField(
         ReferenceField(ProductCategory)
