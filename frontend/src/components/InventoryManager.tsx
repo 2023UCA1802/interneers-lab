@@ -112,10 +112,10 @@ const InventoryManager: React.FC = () => {
             </button>
           ))}
         </nav>
-        <div className="inv__sidebar-footer">
+        {/* <div className="inv__sidebar-footer">
           <div className="inv__status-dot" />
           <span>Connected</span>
-        </div>
+        </div> */}
       </aside>
 
       {/* ── Main Content ──────────────────────────────────── */}
@@ -336,7 +336,7 @@ const CategoriesSection: React.FC<{
 
       <div className="form-card">
         <h3 className="form-card__title">View Categories</h3>
-        <div style={{ display: "flex", gap: "10px" }}>
+        <div className="btn-group">
           <button
             className="btn btn--secondary"
             onClick={() => onShow(api.getCategories, "category", "categories")}
@@ -344,7 +344,7 @@ const CategoriesSection: React.FC<{
             Load All Categories Here
           </button>
           <Link to="/categories" className="btn btn--primary">
-            Go to Categories Page
+            Go to Categories Page &rarr;
           </Link>
         </div>
       </div>

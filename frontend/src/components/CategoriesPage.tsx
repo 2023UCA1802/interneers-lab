@@ -59,28 +59,34 @@ const CategoriesPage: React.FC = () => {
       </header>
 
       <div className="product-page__content">
-        <div className="product-card">
-          <div className="product-card__header">
-            <h3>All Categories</h3>
-          </div>
-          <div className="product-card__body">
-            {categories.length === 0 ? (
-              <p className="text-gray">No categories found.</p>
-            ) : (
-              <div className="category-list">
-                {categories.map((cat) => (
-                  <div key={cat.id} className="category-badge">
-                    <Link
-                      to={`/categories/${cat.id}`}
-                      className="category-badge__link"
-                    >
-                      {cat.name}
-                    </Link>
-                  </div>
-                ))}
+        <div className="categories-grid">
+          {categories.length === 0 ? (
+            <div className="empty-state">No categories found.</div>
+          ) : (
+            categories.map((cat) => (
+              <div key={cat.id} className="category-card-styled">
+                <div className="category-card-styled__header">
+                  <h3>{cat.name}</h3>
+                  <span className="category-card-styled__id">
+                    #{String(cat.id).slice(-4)}
+                  </span>
+                </div>
+                <p className="category-card-styled__desc">
+                  {cat.description ||
+                    "No description provided for this category."}
+                </p>
+                <div className="category-card-styled__footer">
+                  <Link
+                    to={`/categories/${cat.id}`}
+                    className="btn btn--primary btn--sm"
+                    style={{ width: "100%" }}
+                  >
+                    View Details &rarr;
+                  </Link>
+                </div>
               </div>
-            )}
-          </div>
+            ))
+          )}
         </div>
       </div>
     </div>
