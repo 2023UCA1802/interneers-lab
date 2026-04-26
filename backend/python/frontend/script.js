@@ -15,9 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
 async function refreshDropdowns() {
     try {
         const [categories, brands, products] = await Promise.all([
-            apiRequest(`${API_BASE}/`),
-            apiRequest(`${BRAND_BASE}/`),
-            apiRequest(`${API_BASE}/products/`)
+            apiRequest(`${API_BASE}/`).catch(e => { console.error("Categories failed", e); return []; }),
+            apiRequest(`${BRAND_BASE}/`).catch(e => { console.error("Brands failed", e); return []; }),
+            apiRequest(`${API_BASE}/products/`).catch(e => { console.error("Products failed", e); return []; })
         ]);
 
         const populate = (ids, items, defaultText) => {
