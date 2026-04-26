@@ -100,10 +100,10 @@ const InventoryManager: React.FC = () => {
             </button>
           ))}
         </nav>
-        <div className="inv__sidebar-footer">
+        {/* <div className="inv__sidebar-footer">
           <div className="inv__status-dot" />
           <span>Connected</span>
-        </div>
+        </div> */}
       </aside>
 
       {/* ── Main Content ──────────────────────────────────── */}

@@ -36,7 +36,7 @@ class ProductService:
         Raises:
             ValueError: If category IDs are invalid
         """
-        query = Product.objects()
+        query = Product.objects().select_related(max_depth=1)
 
         # Filter by categories (multiple)
         category_ids = filters.get("categories")

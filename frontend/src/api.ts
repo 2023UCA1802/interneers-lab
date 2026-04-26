@@ -18,7 +18,7 @@ export const api = {
     }).then(handleResponse),
   deleteCategory: (id: string | number) =>
     fetch(`${API_BASE}/categories/${id}/`, { method: "DELETE" }).then(
-      () => handleResponse,
+      handleResponse,
     ),
 
   // Products

@@ -23,6 +23,7 @@
     border-radius: 8px;
     opacity: 0;
     transition: opacity 0.25s ease;
+    pointer-events: none;
   }
 
   &:hover {
@@ -153,6 +154,8 @@
     display: flex;
     gap: 8px;
     margin-top: 4px;
+    position: relative;
+    z-index: 1;
   }
 }
 
@@ -170,5 +173,15 @@
   p {
     margin: 0;
     font-size: 0.95em;
+  }
+}
+@media (max-width: 480px) {
+  .results-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .result-card {
+    padding: 16px;
   }
 }

@@ -1,13 +1,21 @@
 .toast-container {
   position: fixed;
-  bottom: 32px;
-  right: 32px;
+  bottom: 24px;
+  right: 24px;
   display: flex;
   flex-direction: column;
   gap: 12px;
   z-index: 9999;
   pointer-events: none;
+
+  @media (max-width: 600px) {
+    right: 16px;
+    left: 16px;
+    bottom: 16px;
+    align-items: center;
+  }
 }
+
 
 .toast {
   display: flex;
@@ -16,9 +24,15 @@
   padding: 14px 18px;
   border-radius: 12px;
   min-width: 280px;
-  max-width: 380px;
+  max-width: 420px;
+  width: 100%;
+  @media (max-width: 480px) {
+    min-width: 0;
+    width: auto;
+  }
   font-size: 0.9em;
   font-weight: 500;
+
   pointer-events: all;
   animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
