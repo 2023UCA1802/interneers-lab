@@ -1,9 +1,26 @@
+from mongoengine.errors import DoesNotExist
+
 def product_serializer(product):
+    brand_id = None
+    try:
+        if product.brand:
+            brand_id = str(product.brand.id)
+    except DoesNotExist:
+        brand_id = "Deleted Brand"
+
+    category_ids = []
+    if product.categories:
+        for c in product.categories:
+            try:
+                category_ids.append(str(c.id))
+            except DoesNotExist:
+                continue
+
     return {
         "id": str(product.id),
         "name": product.name,
-        "brand": str(product.brand.id) if product.brand else None,
-        "categories": [str(c.id) for c in product.categories],
+        "brand": brand_id,
+        "categories": category_ids,
     }
 
 def category_serializer(category):
@@ -18,4 +35,4 @@ def brand_serializer(brand):
         "id": str(brand.id),
         "name": brand.name,
         "description": brand.description,
-    }
+    }
